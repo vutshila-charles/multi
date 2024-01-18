@@ -23,11 +23,12 @@ class Expense extends Model
         'user_id',
         'date',
         'name',
+        'category_id'
     ];
 
     public function category()
     {
-        return $this->belongsTo(ExpenseCategories::class, 'expense_category_id');
+        return $this->belongsTo(ExpenseCategories::class, 'category_id');
     }
 
     public function budgetItem()

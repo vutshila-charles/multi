@@ -3,11 +3,8 @@
 namespace App\Http\Livewire\ExpenseTracker;
 
 use Livewire\Component;
- use App\Models\ExpenseTracker\Expense;
- use App\Models\ExpenseTracker\Budget;
  use App\Models\ExpenseTracker\ExpenseCategories;
- use App\Models\ExpenseTracker\BudgetItem;
-use App\Models\User;
+use App\Services\ExpenseTrackerService;
 
 class Create extends Component
 {
@@ -45,7 +42,7 @@ class Create extends Component
 
     public function saveBudget()
     {
-        //group  expenses , category,price by index
+        //group  expenses , category,price by indexs
         $expenses = [];
         foreach($this->price as $index => $price){
             $expenses[] = [
@@ -55,7 +52,17 @@ class Create extends Component
             ];
         }
 
-        dd($expenses);
+        $data =[
+            'user_id' =>auth()->user()->id,
+            'budget_amount' => $this->budgetAmount,
+            'remaining_budget' => $this->remainingBudget,
+            'date' => now(),
+            'expenses' => $expenses,
+        ];
+
+        $create = new ExpenseTrackerService();
+        $create->createRecords($data);
+
     }
     public function render()
     {
